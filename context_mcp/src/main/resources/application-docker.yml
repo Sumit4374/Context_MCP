@@ -1,0 +1,15 @@
+# Docker profile — connects to docker-compose PostgreSQL
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/context_mcp
+    username: context_user
+    password: ${POSTGRES_PASSWORD}
+
+context-platform:
+  server:
+    local-only: true
+  security:
+    api-token-enabled: true
+
+server:
+  address: 0.0.0.0

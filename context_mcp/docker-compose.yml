@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: context-mcp-postgres
+    environment:
+      POSTGRES_DB: context_mcp
+      POSTGRES_USER: context_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-context_dev_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U context_user -d context_mcp"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+    driver: local

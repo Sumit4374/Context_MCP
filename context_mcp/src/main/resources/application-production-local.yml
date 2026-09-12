@@ -1,0 +1,21 @@
+# Production-local profile — hardened local deployment
+context-platform:
+  server:
+    local-only: true
+  security:
+    api-token-enabled: true
+    redact-secrets: true
+    reject-secret-bearing-artifacts: true
+  checkpoint:
+    require-user-confirmation: true
+  artifacts:
+    watcher-enabled: true
+
+logging:
+  level:
+    com.context_mcp: INFO
+    org.springframework: WARN
+    org.hibernate.SQL: WARN
+
+server:
+  address: 127.0.0.1

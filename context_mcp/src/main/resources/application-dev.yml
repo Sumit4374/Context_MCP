@@ -1,0 +1,19 @@
+# Development profile — relaxed security, verbose logging
+spring:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+
+context-platform:
+  server:
+    local-only: true
+  security:
+    api-token-enabled: false
+  artifacts:
+    watcher-enabled: false
+
+logging:
+  level:
+    com.context_mcp: DEBUG
+    org.hibernate.SQL: DEBUG

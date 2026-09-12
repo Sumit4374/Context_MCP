@@ -1,0 +1,131 @@
+spring:
+  application:
+    name: context-mcp
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/context_mcp
+    username: context_user
+    password: ${POSTGRES_PASSWORD:context_dev_password}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+  ai:
+    mcp:
+      server:
+        name: context-mcp
+        version: 0.1.0
+
+# ---------- Context Platform Configuration ----------
+context-platform:
+  server:
+    local-only: true
+
+  checkpoint:
+    enabled: true
+    default-turn-threshold: 10
+    supported-thresholds: [5, 10, 20]
+    require-user-confirmation: true
+    auto-save-categories: []
+    persist-raw-transcript-by-default: false
+
+  persistence:
+    store-raw-transcript: false
+    soft-delete-retention: P30D
+
+  search:
+    semantic-enabled: true
+    keyword-enabled: true
+    default-limit: 10
+    max-limit: 100
+
+  embeddings:
+    provider: none
+    model: ""
+    dimensions: 768
+
+  classifier:
+    provider: rules
+    remote-access-enabled: false
+
+  artifacts:
+    watcher-enabled: false
+    roots: []
+    max-file-size-mb: 250
+    excluded-globs:
+      - "**/.git/**"
+      - "**/node_modules/**"
+      - "**/.env"
+      - "**/*.pem"
+      - "**/*.key"
+      - "**/*.p12"
+      - "**/*.jks"
+
+  security:
+    redact-secrets: true
+    reject-secret-bearing-artifacts: true
+    api-token-enabled: false
+    suppression-default-duration: P30D
+
+# ---------- Actuator ----------
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  health:
+    db:
+      enabled: true
+
+# ---------- Logging ----------
+logging:
+  level:
+    com.context_mcp: INFO
+    org.springframework: WARN
+    org.hibernate.SQL: WARN
+    org.flywaydb: INFO
+  pattern:
+    console: "%d{ISO8601} [%X{correlationId:-none}] %-5level %logger{36} - %msg%n"
+
+# ---------- Server ----------
+server:
+  address: 127.0.0.1
+  port: 9001
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# ---------- OpenAPI ----------
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha

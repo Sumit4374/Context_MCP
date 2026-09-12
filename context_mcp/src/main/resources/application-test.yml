@@ -1,0 +1,20 @@
+# Test profile — Testcontainers will override datasource
+spring:
+  flyway:
+    clean-disabled: false
+
+context-platform:
+  server:
+    local-only: false
+  security:
+    api-token-enabled: false
+  artifacts:
+    watcher-enabled: false
+  embeddings:
+    provider: deterministic
+    dimensions: 768
+
+logging:
+  level:
+    com.context_mcp: DEBUG
+    org.springframework: WARN
