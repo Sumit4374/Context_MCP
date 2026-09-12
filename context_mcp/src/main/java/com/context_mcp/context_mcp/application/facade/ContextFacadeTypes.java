@@ -22,7 +22,7 @@ public final class ContextFacadeTypes {
     }
 
     public enum CandidateScope {
-        CONVERSATION, PROJECT, TOPIC, ARTIFACT, GLOBAL_PREFERENCE
+        CHECKPOINT, CONVERSATION, PROJECT, TOPIC, ARTIFACT, GLOBAL_PREFERENCE
     }
 
     public enum RecommendationDecision {

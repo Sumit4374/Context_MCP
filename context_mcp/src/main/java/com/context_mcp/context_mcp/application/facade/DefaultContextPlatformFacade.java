@@ -230,20 +230,20 @@ public class DefaultContextPlatformFacade implements ContextPlatformFacade {
                     .ifPresent(p -> memory.getProjects().add(p));
         }
 
-        memory = memoryRepository.save(memory);
-        queueEmbeddingJob(memory.getId());
+        MemoryEntity savedMemory = memoryRepository.save(memory);
+        queueEmbeddingJob(savedMemory.getId());
 
         cp.setUserConfirmation("CONFIRMED");
         cp.setConfirmedAt(Instant.now());
         checkpointRepository.save(cp);
 
         auditService.record(AuditAction.CHECKPOINT_CONFIRMED, "CHECKPOINT", cp.getId(),
-                Map.of("memoryId", memory.getId().toString()));
-        auditService.record(AuditAction.MEMORY_CREATED, "MEMORY", memory.getId(),
+                Map.of("memoryId", savedMemory.getId().toString()));
+        auditService.record(AuditAction.MEMORY_CREATED, "MEMORY", savedMemory.getId(),
                 Map.of("explicitness", "CONFIRMED_RECOMMENDATION", "type", memoryType));
 
         return new OperationResult("CONFIRMED", true, "Memory created from confirmed checkpoint",
-                memory.getId(), cp.getId(), null, List.of(), Map.of());
+                savedMemory.getId(), cp.getId(), null, List.of(), Map.of());
     }
 
     // ================= Explicit Memory =================
@@ -286,14 +286,14 @@ public class DefaultContextPlatformFacade implements ContextPlatformFacade {
             memory.getProjects().add(project);
         }
 
-        memory = memoryRepository.save(memory);
-        queueEmbeddingJob(memory.getId());
+        MemoryEntity savedMemory = memoryRepository.save(memory);
+        queueEmbeddingJob(savedMemory.getId());
 
-        auditService.record(AuditAction.MEMORY_CREATED, "MEMORY", memory.getId(),
-                Map.of("explicitness", "EXPLICIT_SAVE", "type", memory.getMemoryType()));
+        auditService.record(AuditAction.MEMORY_CREATED, "MEMORY", savedMemory.getId(),
+                Map.of("explicitness", "EXPLICIT_SAVE", "type", savedMemory.getMemoryType()));
 
         return new OperationResult("SAVED", true, "Memory persisted immediately",
-                memory.getId(), null, null, redactionNotes, Map.of());
+                savedMemory.getId(), null, null, redactionNotes, Map.of());
     }
 
     // ================= Suppression =================
