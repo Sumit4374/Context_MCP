@@ -3,7 +3,6 @@ package com.context_mcp.context_mcp.infrastructure.embedding;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 
 /**
  * No-op embedding provider used when no model provider is configured.

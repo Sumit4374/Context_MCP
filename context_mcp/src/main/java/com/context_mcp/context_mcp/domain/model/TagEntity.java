@@ -1,7 +1,6 @@
 package com.context_mcp.context_mcp.domain.model;
 
 import jakarta.persistence.*;
-import java.time.Instant;
 import java.util.UUID;
 
 @Entity
